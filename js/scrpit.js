@@ -1,8 +1,9 @@
-
+//traemos los botones del carrito
 const botonCarrito = document.querySelector('#boton-carrito');
 const cerrarCarritoBtn = document.querySelector('#cerrar-carrito');
 const carrito = document.querySelector('#carrito');
 const botonesAgregarCarrito = document.querySelectorAll('.btn-agregar');
+//Preparamos la lista del carrito y las listas de categorias 
 let listacarrito = [];
 const cortes = [
     {
@@ -86,21 +87,23 @@ const listaArrays = [cortes, achuras,acomp];
 
 
 let contador = 0;
-
+//Traemos la el contenedor donde se cargaran dinamicamente los productos
 const contenido = document.querySelector('#contenido');
-
-
+//Recorremos el Array que contiene las categorias
 listaArrays.forEach((array) => {
     contador++;
+    //creamos el contenedor principal y le asignamos el ID y sus clases 
     const contenedorPrincipal = document.createElement("div");
     contenedorPrincipal.id = "contenedor-principal-"+contador;
     contenedorPrincipal.classList.add("row", "row-cols-1", "row-cols-md-3", "row-cols-lg-4", "m-3", "g-4");
     contenido.appendChild(contenedorPrincipal);
-
+    //Recorremos el array de categorias para obtener los objetos
     array.forEach((elemento) => {
+        //creamos cada uno de los contenedores de los productos y sus partes
+        
+        //agregando los datos que necesitan de forma dinamica
         const colDiv = document.createElement("div");
         colDiv.classList.add("col");
-
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("card", "h-100", "card-edicion");
 
@@ -118,22 +121,27 @@ listaArrays.forEach((array) => {
 
         const precioPorKg = document.createElement("p");
         precioPorKg.textContent = (elemento.categoria === 3) ? "Precio por Unidad:" : "PRECIO POR KG:";
+        
         const precio = document.createElement("p");
         precio.classList.add("precio");
         precio.textContent = elemento.precio;
 
         const cantidadLabel = document.createElement("p");
         cantidadLabel.textContent = (elemento.categoria === 3) ? "Cantidad por Unidad:" : "Cantidad en kg:";
+        
         const cantidadContainerDiv = document.createElement("div");
         cantidadContainerDiv.classList.add("cantidad-container");
+
         const decrementBtn = document.createElement("button");
         decrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-decrement");
         decrementBtn.textContent = "-";
+
         const cantidadInput = document.createElement("input");
         cantidadInput.type = "number";
         cantidadInput.classList.add("custom-input", "cantidad");
         cantidadInput.value = "1";
         cantidadInput.min = "1";
+
         const incrementBtn = document.createElement("button");
         incrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-increment");
         incrementBtn.textContent = "+";
@@ -142,7 +150,7 @@ listaArrays.forEach((array) => {
         agregarBtn.type = "button";
         agregarBtn.classList.add("btn", "btn-primary", "btn-agregar");
         agregarBtn.textContent = "Agregar al carrito";
-
+        //se agrega el evento a la hora de hacer click en el boton agregar al carrito
         agregarBtn.addEventListener("click", function() {
             const elementoVendido = elemento.nombre;
             const precioElemento = parseFloat(elemento.precio);
@@ -150,7 +158,7 @@ listaArrays.forEach((array) => {
             const categoriaAGuardar = parseInt(elemento.categoria);
             const imgenAGuardar = elemento.imagen;
             const indice = listacarrito.findIndex(item => item.nombre === elementoVendido);
-           
+            //guardamos todos los datos necesarios para mostrar
             if (indice !== -1) {
                 listacarrito[indice].imagen = imgenAGuardar;
                 listacarrito[indice].cantidad += cantidadVendida;
@@ -168,6 +176,7 @@ listaArrays.forEach((array) => {
                 };
                 listacarrito.push(item);
             }
+            //seteamos la lista para que se vaya guardando en el Local Storage
             localStorage.setItem("lista", JSON.stringify(listacarrito));
             mostrarListaCarrito();
         });
@@ -181,10 +190,10 @@ listaArrays.forEach((array) => {
 });
 
 
-
+//funcion para mostrar el carrito 
 botonCarrito.addEventListener('click', function() {
     carrito.classList.remove('carrito-oculto');
-
+    //si la lista  del LS existe se carga
     const carritoGuardado = localStorage.getItem("lista");
 if (carritoGuardado) {
     listacarrito = JSON.parse(carritoGuardado);
@@ -201,19 +210,20 @@ if (carritoGuardado) {
 });
 
 
-
+//funcion para ocultar el carrito
 cerrarCarritoBtn.addEventListener('click', function() {
     carrito.classList.add('carrito-oculto');
 });
 
 
 
-
+//funcion que carga la lista en el Carrito
 function mostrarListaCarrito() {
     const lista = document.querySelector('#lista');
     lista.innerHTML = '';
     let total = 0; 
     let mensaje = '';
+    //recorremos la lista para ir creando los elementos necesarios que aparecen en el carrito
     listacarrito.forEach(item => {
         const li = document.createElement("li");
         const imagen = document.createElement("img");
@@ -243,6 +253,7 @@ function mostrarListaCarrito() {
     const botonBorrar = document.createElement("button");
     botonBorrar.textContent = "Borrar Carrito";
     botonBorrar.classList.add('boton-borrarTodo-estilos');
+    //se agrega el evento del boton borrar dentro del carrito
     botonBorrar.addEventListener('click', function() {
 
         lista.innerHTML = '';
@@ -250,11 +261,12 @@ function mostrarListaCarrito() {
     });
     lista.append(botonBorrar);
 }
-
+// funcion que permite eliminar toda la lista del Local Storage
 function vaciarCarrito() {
     listacarrito = []; 
     localStorage.removeItem("lista"); 
 }
+// funcion que elimina de un elemento de acuerdo a la cantidad
 function eliminarDelCarrito(item) {
     const index = listacarrito.indexOf(item);
     if (index !== -1) {
@@ -272,14 +284,14 @@ function eliminarDelCarrito(item) {
     }
 }
 
-
+//evento del boton '+' 
 document.querySelectorAll('.btn-increment').forEach(btn => {
     btn.addEventListener('click', function() {
         const cantidadInput = this.parentElement.querySelector('.cantidad');
         cantidadInput.value = parseInt(cantidadInput.value) + 1;
     });
 });
-
+//evento del boton '-'
 document.querySelectorAll('.btn-decrement').forEach(btn => {
     btn.addEventListener('click', function() {
         const cantidadInput = this.parentElement.querySelector('.cantidad');
