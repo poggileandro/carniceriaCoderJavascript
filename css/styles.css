@@ -51,6 +51,7 @@ box-shadow: -20px 0px 100px 0px rgba(0,0,0,0.63);
   width: 100%; 
   text-align: right; 
   border-bottom: 2px solid #000;
+  
 }
 
 .btn-close {
@@ -68,6 +69,7 @@ box-shadow: -20px 0px 100px 0px rgba(0,0,0,0.63);
   flex-direction: column;
   margin: 20px;
  align-items: center;
+ 
 }
 
 .estilos-lista{
@@ -121,7 +123,7 @@ box-shadow: -20px 0px 100px 0px rgba(0,0,0,0.63);
 
 .menu-lateral {
   width: 300px;
-  background: linear-gradient(180deg,#ffcc3fcc  40%, #fff 100%);
+  background: linear-gradient(180deg,#484747  40%, #fff 100%);
 }
 
 .contenido {
@@ -131,21 +133,46 @@ box-shadow: -20px 0px 100px 0px rgba(0,0,0,0.63);
 }
 
 .menu-lista {
-  padding: 10px;
+  padding: 0%;
   display: flex;
   text-align: left;
   flex-direction: column;
-  justify-content: end;
   list-style: none;
 }
-
-.categoria {
-  margin-bottom: 50px;
+.categoria{
+  display: flex;
+  flex-direction: column;
+  padding-inline: 1rem;
+  padding-block: 2rem;
+  transition: background-color 0.3s; 
 }
-.categoria a { 
+
+.categoria a {
   text-decoration: none;
-  color: #000;
-  font-size: 1.5rem;
+  color: #fff;
+  font-size: 1rem;
+  position: relative;
+}
+
+.categoria a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background-color: #fff;
+  transition: width 0.3s ease-out, left 0.3s ease-out;
+}
+
+.categoria a:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+
+.categoria:hover{
+  background-color: #ff3f3f;
 }
 
 .invisible{
