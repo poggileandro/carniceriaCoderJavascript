@@ -5,6 +5,10 @@ const carrito = document.querySelector('#carrito');
 const botonesAgregarCarrito = document.querySelectorAll('.btn-agregar');
 //Preparamos la lista del carrito y las listas de categorias 
 let listacarrito = [];
+
+const listaArrays=[];
+
+/*
 const cortes = [
     {
         nombre: "Asado",
@@ -83,7 +87,26 @@ const acomp = [
         imagen:"./imagenes/papas fritas.jpg"
     },
 ];
-const listaArrays = [cortes, achuras,acomp];
+*/
+
+
+async function cargarDatos() {
+    try {
+      const response = await fetch('datos.json');
+      const data = await response.json();
+      listaArrays = [data.cortes, data.achuras,data.acomp];
+    } catch (error) {
+      console.error('Error al cargar el archivo JSON:', error);
+    }
+  }
+
+
+  cargarDatos();
+  
+
+
+
+
 
 
 let contador = 0;

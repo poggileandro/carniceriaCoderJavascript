@@ -1,0 +1,80 @@
+{
+    "cortes": [
+        {
+            "nombre": "Asado",
+            "precio": 2000,
+            "categoria": 1,
+            "imagen": "./imagenes/asado.jpg"
+        },
+        {
+            "nombre": "Vacío",
+            "precio": 1800,
+            "categoria": 1,
+            "imagen": "./imagenes/vacio.jpg"
+        },
+        {
+            "nombre": "Matambre",
+            "precio": 1900,
+            "categoria": 1,
+            "imagen": "./imagenes/matambre.jpg"
+        },
+        {
+            "nombre": "Bondiola",
+            "precio": 2100,
+            "categoria": 1,
+            "imagen": "./imagenes/bondiola.jpg"
+        }
+    ],
+    "achuras": [
+        {
+            "nombre": "Molleja",
+            "precio": 8000,
+            "categoria": 2,
+            "imagen": "./imagenes/molleja.jpg"
+        },
+        {
+            "nombre": "Riñon",
+            "precio": 1800,
+            "categoria": 2,
+            "imagen": "./imagenes/riñon.jpg"
+        },
+        {
+            "nombre": "Chinchulin",
+            "precio": 1900,
+            "categoria": 2,
+            "imagen": "./imagenes/chinchulin.jpg"
+        },
+        {
+            "nombre": "Chorizo",
+            "precio": 2100,
+            "categoria": 2,
+            "imagen": "./imagenes/chorizo.jpg"
+        }
+    ],
+    "acomp": [
+        {
+            "nombre": "Provoleta",
+            "precio": 8000,
+            "categoria": 3,
+            "imagen": "./imagenes/provoleta.jpg"
+        },
+        {
+            "nombre": "Queso",
+            "precio": 1800,
+            "categoria": 3,
+            "imagen": "./imagenes/queso.jpg"
+        },
+        {
+            "nombre": "Salame",
+            "precio": 1900,
+            "categoria": 3,
+            "imagen": "./imagenes/salame.jpg"
+        },
+        {
+            "nombre": "Papas fritas",
+            "precio": 2100,
+            "categoria": 3,
+            "imagen": "./imagenes/papas fritas.jpg"
+        }
+    ]
+}
