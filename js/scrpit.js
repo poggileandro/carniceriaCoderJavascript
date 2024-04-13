@@ -6,7 +6,6 @@ const botonesAgregarCarrito = document.querySelectorAll('.btn-agregar');
 //Preparamos la lista del carrito y las listas de categorias 
 let listacarrito = [];
 
-const listaArrays=[];
 
 /*
 const cortes = [
@@ -88,129 +87,126 @@ const acomp = [
     },
 ];
 */
-
+let listaArrays = [];
 
 async function cargarDatos() {
     try {
-      const response = await fetch('datos.json');
+      const response = await fetch('js/datos.json');
       const data = await response.json();
-      listaArrays = [data.cortes, data.achuras,data.acomp];
+      listaArrays = Object.values(data);
+      let contador = 0;
+      //Traemos la el contenedor donde se cargaran dinamicamente los productos
+      const contenido = document.querySelector('#contenido');
+      //Recorremos el Array que contiene las categorias
+      listaArrays.forEach((array) => {
+          contador++;
+          //creamos el contenedor principal y le asignamos el ID y sus clases 
+          const contenedorPrincipal = document.createElement("div");
+          contenedorPrincipal.id = "contenedor-principal-"+contador;
+          contenedorPrincipal.classList.add("row", "row-cols-1", "row-cols-md-3", "row-cols-lg-4", "m-3", "g-4");
+          contenido.appendChild(contenedorPrincipal);
+          //Recorremos el array de categorias para obtener los objetos
+          array.forEach((elemento) => {
+              //creamos cada uno de los contenedores de los productos y sus partes
+              
+              //agregando los datos que necesitan de forma dinamica
+              const colDiv = document.createElement("div");
+              colDiv.classList.add("col");
+              const cardDiv = document.createElement("div");
+              cardDiv.classList.add("card", "h-100", "card-edicion");
+      
+              const img = document.createElement("img");
+              img.src = elemento.imagen;
+              img.classList.add("card-img-top");
+              img.alt = "Imagen de " + elemento.nombre;
+      
+              const cardBodyDiv = document.createElement("div");
+              cardBodyDiv.classList.add("card-body", "carta");
+      
+              const titulo = document.createElement("h5");
+              titulo.classList.add("card-title", "corte");
+              titulo.textContent = elemento.nombre.toUpperCase();
+      
+              const precioPorKg = document.createElement("p");
+              precioPorKg.textContent = (elemento.categoria === 3) ? "Precio por Unidad:" : "PRECIO POR KG:";
+              
+              const precio = document.createElement("p");
+              precio.classList.add("precio");
+              precio.textContent = elemento.precio;
+      
+              const cantidadLabel = document.createElement("p");
+              cantidadLabel.textContent = (elemento.categoria === 3) ? "Cantidad por Unidad:" : "Cantidad en kg:";
+              
+              const cantidadContainerDiv = document.createElement("div");
+              cantidadContainerDiv.classList.add("cantidad-container");
+      
+              const decrementBtn = document.createElement("button");
+              decrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-decrement");
+              decrementBtn.textContent = "-";
+      
+              const cantidadInput = document.createElement("input");
+              cantidadInput.type = "number";
+              cantidadInput.classList.add("custom-input", "cantidad");
+              cantidadInput.value = "1";
+              cantidadInput.min = "1";
+      
+              const incrementBtn = document.createElement("button");
+              incrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-increment");
+              incrementBtn.textContent = "+";
+      
+              const agregarBtn = document.createElement("button");
+              agregarBtn.type = "button";
+              agregarBtn.classList.add("btn", "btn-primary", "btn-agregar");
+              agregarBtn.textContent = "Agregar al carrito";
+              //se agrega el evento a la hora de hacer click en el boton agregar al carrito
+              agregarBtn.addEventListener("click", function() {
+                  const elementoVendido = elemento.nombre;
+                  const precioElemento = parseFloat(elemento.precio);
+                  const cantidadVendida = parseInt(cantidadInput.value);
+                  const categoriaAGuardar = parseInt(elemento.categoria);
+                  const imgenAGuardar = elemento.imagen;
+                  const indice = listacarrito.findIndex(item => item.nombre === elementoVendido);
+                  //guardamos todos los datos necesarios para mostrar
+                  if (indice !== -1) {
+                      listacarrito[indice].imagen = imgenAGuardar;
+                      listacarrito[indice].cantidad += cantidadVendida;
+                      listacarrito[indice].precioPorKg = precioElemento;
+                      listacarrito[indice].precioTotal += precioElemento * cantidadVendida;
+                      listacarrito[indice].categoria = categoriaAGuardar;
+                  } else {
+                      const item = {
+                          nombre: elementoVendido,
+                          cantidad: cantidadVendida,
+                          precioPorKg: precioElemento,
+                          precioTotal: precioElemento * cantidadVendida,
+                          categoria: categoriaAGuardar,
+                          imagen: imgenAGuardar,
+                      };
+                      listacarrito.push(item);
+                  }
+                  //seteamos la lista para que se vaya guardando en el Local Storage
+                  localStorage.setItem("lista", JSON.stringify(listacarrito));
+                  mostrarListaCarrito();
+              });
+      
+              cantidadContainerDiv.append(decrementBtn, cantidadInput, incrementBtn);
+              cardBodyDiv.append(titulo, precioPorKg, precio, cantidadLabel, cantidadContainerDiv, agregarBtn);
+              cardDiv.append(img, cardBodyDiv);
+              colDiv.appendChild(cardDiv);
+              contenedorPrincipal.appendChild(colDiv);
+          });
+      });
     } catch (error) {
-      console.error('Error al cargar el archivo JSON:', error);
+        const cardBodyDivError = document.createElement("div");
+        cardBodyDivError.textContent = 'Error al cargar los productos';
+        cardBodyDivError.style.color = 'white';
+        cardBodyDivError.style.fontWeight = 'bold';
+        const contenido = document.querySelector('#contenido');
+        contenido.appendChild(cardBodyDivError);
     }
   }
 
-
-  cargarDatos();
-  
-
-
-
-
-
-
-let contador = 0;
-//Traemos la el contenedor donde se cargaran dinamicamente los productos
-const contenido = document.querySelector('#contenido');
-//Recorremos el Array que contiene las categorias
-listaArrays.forEach((array) => {
-    contador++;
-    //creamos el contenedor principal y le asignamos el ID y sus clases 
-    const contenedorPrincipal = document.createElement("div");
-    contenedorPrincipal.id = "contenedor-principal-"+contador;
-    contenedorPrincipal.classList.add("row", "row-cols-1", "row-cols-md-3", "row-cols-lg-4", "m-3", "g-4");
-    contenido.appendChild(contenedorPrincipal);
-    //Recorremos el array de categorias para obtener los objetos
-    array.forEach((elemento) => {
-        //creamos cada uno de los contenedores de los productos y sus partes
-        
-        //agregando los datos que necesitan de forma dinamica
-        const colDiv = document.createElement("div");
-        colDiv.classList.add("col");
-        const cardDiv = document.createElement("div");
-        cardDiv.classList.add("card", "h-100", "card-edicion");
-
-        const img = document.createElement("img");
-        img.src = elemento.imagen;
-        img.classList.add("card-img-top");
-        img.alt = "Imagen de " + elemento.nombre;
-
-        const cardBodyDiv = document.createElement("div");
-        cardBodyDiv.classList.add("card-body", "carta");
-
-        const titulo = document.createElement("h5");
-        titulo.classList.add("card-title", "corte");
-        titulo.textContent = elemento.nombre.toUpperCase();
-
-        const precioPorKg = document.createElement("p");
-        precioPorKg.textContent = (elemento.categoria === 3) ? "Precio por Unidad:" : "PRECIO POR KG:";
-        
-        const precio = document.createElement("p");
-        precio.classList.add("precio");
-        precio.textContent = elemento.precio;
-
-        const cantidadLabel = document.createElement("p");
-        cantidadLabel.textContent = (elemento.categoria === 3) ? "Cantidad por Unidad:" : "Cantidad en kg:";
-        
-        const cantidadContainerDiv = document.createElement("div");
-        cantidadContainerDiv.classList.add("cantidad-container");
-
-        const decrementBtn = document.createElement("button");
-        decrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-decrement");
-        decrementBtn.textContent = "-";
-
-        const cantidadInput = document.createElement("input");
-        cantidadInput.type = "number";
-        cantidadInput.classList.add("custom-input", "cantidad");
-        cantidadInput.value = "1";
-        cantidadInput.min = "1";
-
-        const incrementBtn = document.createElement("button");
-        incrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-increment");
-        incrementBtn.textContent = "+";
-
-        const agregarBtn = document.createElement("button");
-        agregarBtn.type = "button";
-        agregarBtn.classList.add("btn", "btn-primary", "btn-agregar");
-        agregarBtn.textContent = "Agregar al carrito";
-        //se agrega el evento a la hora de hacer click en el boton agregar al carrito
-        agregarBtn.addEventListener("click", function() {
-            const elementoVendido = elemento.nombre;
-            const precioElemento = parseFloat(elemento.precio);
-            const cantidadVendida = parseInt(cantidadInput.value);
-            const categoriaAGuardar = parseInt(elemento.categoria);
-            const imgenAGuardar = elemento.imagen;
-            const indice = listacarrito.findIndex(item => item.nombre === elementoVendido);
-            //guardamos todos los datos necesarios para mostrar
-            if (indice !== -1) {
-                listacarrito[indice].imagen = imgenAGuardar;
-                listacarrito[indice].cantidad += cantidadVendida;
-                listacarrito[indice].precioPorKg = precioElemento;
-                listacarrito[indice].precioTotal += precioElemento * cantidadVendida;
-                listacarrito[indice].categoria = categoriaAGuardar;
-            } else {
-                const item = {
-                    nombre: elementoVendido,
-                    cantidad: cantidadVendida,
-                    precioPorKg: precioElemento,
-                    precioTotal: precioElemento * cantidadVendida,
-                    categoria: categoriaAGuardar,
-                    imagen: imgenAGuardar,
-                };
-                listacarrito.push(item);
-            }
-            //seteamos la lista para que se vaya guardando en el Local Storage
-            localStorage.setItem("lista", JSON.stringify(listacarrito));
-            mostrarListaCarrito();
-        });
-
-        cantidadContainerDiv.append(decrementBtn, cantidadInput, incrementBtn);
-        cardBodyDiv.append(titulo, precioPorKg, precio, cantidadLabel, cantidadContainerDiv, agregarBtn);
-        cardDiv.append(img, cardBodyDiv);
-        colDiv.appendChild(cardDiv);
-        contenedorPrincipal.appendChild(colDiv);
-    });
-});
+cargarDatos();
 
 
 //funcion para mostrar el carrito 
