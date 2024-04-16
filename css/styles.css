@@ -109,6 +109,7 @@ box-shadow: -20px 0px 100px 0px rgba(0,0,0,0.63);
   margin-bottom: 1rem;
 
 }
+
 .custom-input::-webkit-inner-spin-button,
 .custom-input::-webkit-outer-spin-button {
     display: none;

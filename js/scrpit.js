@@ -69,10 +69,10 @@ function cargarElementos(listaArrays){
     
             const cantidadInput = document.createElement("input");
             cantidadInput.type = "number";
+            cantidadInput.readOnly=true;
             cantidadInput.classList.add("custom-input", "cantidad");
             cantidadInput.value = "1";
             cantidadInput.min = "1";
-            cantidadInput.readonly = true;
 
             const decrementBtn = document.createElement("button");
             decrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-decrement");
