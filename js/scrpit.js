@@ -5,88 +5,6 @@ const carrito = document.querySelector('#carrito');
 const botonesAgregarCarrito = document.querySelectorAll('.btn-agregar');
 //Preparamos la lista del carrito y las listas de categorias 
 let listacarrito = [];
-
-
-/*
-const cortes = [
-    {
-        nombre: "Asado",
-        precio: 2000,
-        categoria: 1,
-        imagen:"./imagenes/asado.jpg"
-    },
-    {
-        nombre: "Vacío",
-        precio: 1800,
-        categoria: 1,
-        imagen:"./imagenes/vacio.jpg"
-    },
-    {
-        nombre: "Matambre",
-        precio: 1900,
-        categoria: 1,
-        imagen:"./imagenes/matambre.jpg"
-    },
-    {
-        nombre: "Bondiola",
-        precio: 2100,
-        categoria: 1,
-        imagen:"./imagenes/bondiola.jpg"
-    },
-];
-const achuras = [
-    {
-        nombre: "Molleja",
-        precio: 8000,
-        categoria: 2,
-        imagen:"./imagenes/molleja.jpg"
-    },
-    {
-        nombre: "Riñon",
-        precio: 1800,
-        categoria: 2,
-        imagen:"./imagenes/riñon.jpg"
-    },
-    {
-        nombre: "Chinchulin",
-        precio: 1900,
-        categoria: 2,
-        imagen:"./imagenes/chinchulin.jpg"
-    },
-    {
-        nombre: "Chorizo",
-        precio: 2100,
-        categoria: 2,
-        imagen:"./imagenes/chorizo.jpg"
-    },
-];
-const acomp = [
-    {
-        nombre: "Provoleta",
-        precio: 8000,
-        categoria: 3,
-        imagen:"./imagenes/provoleta.jpg"
-    },
-    {
-        nombre: "Queso",
-        precio: 1800,
-        categoria: 3,
-        imagen:"./imagenes/queso.jpg"
-    },
-    {
-        nombre: "Salame",
-        precio: 1900,
-        categoria: 3,
-        imagen:"./imagenes/salame.jpg"
-    },
-    {
-        nombre: "Papas fritas",
-        precio: 2100,
-        categoria: 3,
-        imagen:"./imagenes/papas fritas.jpg"
-    },
-];
-*/
 let listaArrays = [];
 
 async function cargarDatos() {
@@ -154,6 +72,7 @@ function cargarElementos(listaArrays){
             cantidadInput.classList.add("custom-input", "cantidad");
             cantidadInput.value = "1";
             cantidadInput.min = "1";
+            cantidadInput.readonly = true;
 
             const decrementBtn = document.createElement("button");
             decrementBtn.classList.add("btn", "btn-sm", "btn-secondary", "btn-decrement");
@@ -172,9 +91,7 @@ function cargarElementos(listaArrays){
                     const cantidadInput = this.parentElement.querySelector('.cantidad');
                     cantidadInput.value = parseInt(cantidadInput.value) + 1;
                 });
-           
-
-    
+        
             const agregarBtn = document.createElement("button");
             agregarBtn.type = "button";
             agregarBtn.classList.add("btn", "btn-primary", "btn-agregar");
@@ -205,6 +122,8 @@ function cargarElementos(listaArrays){
                     };
                     listacarrito.push(item); 
                 }
+                //si se agregan productos se cambia el logo del carrito
+                cambiarIconoCarrito();
                 //usamos TOASTIFY para que muestre lo que se va agregando
                 let mensaje_variable;
                 if(categoriaAGuardar === 3 ){
@@ -216,15 +135,11 @@ function cargarElementos(listaArrays){
                 }else{
                     mensaje_variable="kg";
                 }
+                
                 Toastify({
                     text: `Se añadió: ${cantidadInput.value} ${mensaje_variable} de ${elemento.nombre}`,
                     className: "info-toast",
-                    style: {
-                        background: "linear-gradient(to right, #ffcccc, #ffffff)", // Rojo suave a blanco
-                        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)", // Sombra leve
-                        borderRadius: "10px", // Borde redondeado
-                        color: "#000000" // Color del texto negro
-                    }
+                    close:true,
                 }).showToast();
                 //seteamos la lista para que se vaya guardando en el Local Storage
                 localStorage.setItem("lista", JSON.stringify(listacarrito));
@@ -363,11 +278,13 @@ function mostrarListaCarrito() {
             }
         });
     });
+   
     lista.append(botonBorrar);
 }
 // funcion que permite eliminar toda la lista del Local Storage
 function vaciarCarrito() {
     listacarrito = []; 
+    cambiarIconoCarrito();
     localStorage.removeItem("lista"); 
 }
 // funcion que elimina de un elemento de acuerdo a la cantidad
@@ -387,23 +304,6 @@ function eliminarDelCarrito(item) {
         }
     }
 }
-
-//evento del boton '+' 
-document.querySelectorAll('.btn-increment').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const cantidadInput = this.parentElement.querySelector('.cantidad');
-        cantidadInput.value = parseInt(cantidadInput.value) + 1;
-    });
-});
-//evento del boton '-'
-document.querySelectorAll('.btn-decrement').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const cantidadInput = this.parentElement.querySelector('.cantidad');
-        if (parseInt(cantidadInput.value) > 1) {
-            cantidadInput.value = parseInt(cantidadInput.value) - 1;
-        }
-    });
-});
 
 // Obtener los botones del menú lateral
 const btnTodos = document.querySelector("#btn-Todos");
@@ -460,10 +360,15 @@ function mostrarProductosPorCategoria(categoria) {
     });
 }
 
+function cambiarIconoCarrito(){
+    const iconoCarrito = botonCarrito.querySelector('i');
+    if (listacarrito.length === 0) {
 
-
-
-
-
+        iconoCarrito.classList.add("bi-cart-plus");
+    }else{
+        iconoCarrito.classList.add("bi-cart-check");
+        iconoCarrito.classList.remove("bi-cart-plus");
+    }
+}
 
 
